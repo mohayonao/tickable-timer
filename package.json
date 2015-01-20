@@ -1,0 +1,41 @@
+{
+  "name": "tickable-timer",
+  "description": "Manual ticking timer API",
+  "version": "0.0.1",
+  "author": "mohayonao <mohayonao@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/mohayonao/tickable-timer/issues"
+  },
+  "devDependencies": {
+    "6to5": "^2.13.3",
+    "browserify": "^8.1.1",
+    "espower-6to5": "^1.1.0",
+    "mocha": "^2.1.0",
+    "power-assert": "^0.10.1",
+    "source-map-support": "^0.2.9",
+    "uglify-js": "^2.4.16"
+  },
+  "files": [
+    "lib"
+  ],
+  "homepage": "https://github.com/mohayonao/tickable-timer/",
+  "keywords": [
+    "timer",
+    "test"
+  ],
+  "license": "MIT",
+  "main": "lib/tickable-timer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohayonao/tickable-timer.git"
+  },
+  "scripts": {
+    "build": "6to5 src --out-dir lib --source-maps-inline",
+    "test": "npm run build && mocha test/*.js",
+    "browserify": "mkdir -p build && npm run build && browserify lib/tickable-timer --standalone TickableTimer | tee build/tickable-timer.js | uglifyjs > build/tickable-timer.min.js"
+  },
+  "dependencies": {
+    "tickable-interval": "0.0.1",
+    "tickable-timeout": "0.0.1"
+  }
+}

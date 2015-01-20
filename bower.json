@@ -1,0 +1,20 @@
+{
+  "name": "tickable-timer",
+  "description": "Manual ticking timer API",
+  "version": "0.0.1",
+  "authors": [
+    "mohayonao <mohayonao@gmail.com>"
+  ],
+  "homepage": "https://github.com/mohayonao/tickable-timer/",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "test"
+  ],
+  "keywords": [
+    "timer",
+    "test"
+  ],
+  "license": "MIT",
+  "main": "build/tickable-timer.js"
+}
