@@ -30,9 +30,11 @@
     "url": "https://github.com/mohayonao/tickable-timer.git"
   },
   "scripts": {
-    "build": "6to5 src --out-dir lib --source-maps-inline",
-    "test": "npm run build && mocha test/*.js",
-    "browserify": "mkdir -p build && npm run build && browserify lib/tickable-timer --standalone TickableTimer | tee build/tickable-timer.js | uglifyjs > build/tickable-timer.min.js"
+    "build": "npm run build-6to5 && npm run build-browser && npm run build-minify",
+    "build-6to5": "6to5 src --out-dir lib --source-maps-inline",
+    "build-browser": "browserify lib/tickable-timer.js --standalone TickableTimer > build/tickable-timer.js",
+    "build-minify": "uglifyjs build/tickable-timer.js > build/tickable-timer.min.js",
+    "test": "npm run build-6to5 && mocha"
   },
   "dependencies": {
     "tickable-interval": "0.0.3",
