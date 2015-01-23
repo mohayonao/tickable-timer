@@ -35,7 +35,7 @@
     "browserify": "mkdir -p build && npm run build && browserify lib/tickable-timer --standalone TickableTimer | tee build/tickable-timer.js | uglifyjs > build/tickable-timer.min.js"
   },
   "dependencies": {
-    "tickable-interval": "0.0.1",
-    "tickable-timeout": "0.0.1"
+    "tickable-interval": "0.0.3",
+    "tickable-timeout": "0.0.3"
   }
 }
