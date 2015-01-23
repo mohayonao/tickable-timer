@@ -1,4 +1,5 @@
 # tickable-timer
+[![Build Status](http://img.shields.io/travis/mohayonao/tickable-timer.svg?style=flat)](https://travis-ci.org/mohayonao/tickable-timer)
 [![NPM Version](http://img.shields.io/npm/v/tickable-timer.svg?style=flat)](https://www.npmjs.org/package/tickable-timer)
 
 Manual ticking `setTimeout` / `setInterval`.
