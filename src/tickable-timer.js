@@ -4,74 +4,88 @@ import {TickableTimeout} from "tickable-timeout";
 import {TickableInterval} from "tickable-interval";
 
 var _timerId = 0;
-var _timeouts = {};
-var _intervals = {};
+var _timers = [];
+var _ = {
+  remain: timer => timer.remain,
+  minValue: (a, b) => a < b ? a : b,
+};
 
 /**
+ * setTimeout
  * @param {function} callback
- * @param {number} timeout
+ * @param {number} delay
  * @return {number} timerId
- * @api public
+ * @public
  */
-export function setTimeout(callback, timeout) {
+export function setTimeout(callback, delay) {
   var timer = new TickableTimeout();
 
-  timer.set(callback, +timeout || 0);
-
   _timerId += 1;
-  _timeouts[_timerId] = timer;
+  _timers[_timerId] = timer;
+
+  var timerId = _timerId;
+  timer.set(()=> {
+    callback();
+    _timers[timerId].clear();
+    delete _timers[timerId];
+  }, delay);
 
   return _timerId;
 }
 
 /**
+ * clearTimeout
  * @param {number} timerId
- * @api public
+ * @public
  */
 export function clearTimeout(timerId) {
-  if (_timeouts[timerId]) {
-    _timeouts[timerId].clear();
-    delete _timeouts[timerId];
+  if (_timers[timerId] instanceof TickableTimeout) {
+    _timers[timerId].clear();
+    delete _timers[timerId];
   }
 }
 
 /**
+ * setInterval
  * @param {function} callback
- * @param {number} interval
+ * @param {number} delay
  * @return {number} timerId
- * @api public
+ * @public
  */
-export function setInterval(callback, interval) {
+export function setInterval(callback, delay) {
   var timer = new TickableInterval();
 
-  timer.set(callback, +interval || 0);
-
   _timerId += 1;
-  _intervals[_timerId] = timer;
+  _timers[_timerId] = timer;
+
+  timer.set(callback, delay);
 
   return _timerId;
 }
 
 /**
+ * clearInterval
  * @param {number} timerId
- * @api public
+ * @public
  */
 export function clearInterval(timerId) {
-  if (_intervals[timerId]) {
-    _intervals[timerId].clear();
-    delete _intervals[timerId];
+  if (_timers[timerId] instanceof TickableInterval) {
+    _timers[timerId].clear();
+    delete _timers[timerId];
   }
 }
 
 /**
+ * ticking
  * @param {number} tick
- * @api public
+ * @public
  */
-export function tick(tick) {
-  Object.keys(_timeouts).forEach((timerId)=> {
-    _timeouts[timerId].tick(tick);
-  });
-  Object.keys(_intervals).forEach((timerId)=> {
-    _intervals[timerId].tick(tick);
-  });
+export function tick(tick = 1) {
+  tick = Math.max(1, +tick|0);
+
+  while (tick > 0) {
+    var remain = _timers.map(_.remain).reduce(_.minValue, tick);
+    _timers.forEach(timer => timer.tick(remain));
+    tick -= remain;
+  }
 }
