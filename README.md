@@ -1,6 +1,7 @@
 # tickable-timer
 [![Build Status](http://img.shields.io/travis/mohayonao/tickable-timer.svg?style=flat)](https://travis-ci.org/mohayonao/tickable-timer)
 [![NPM Version](http://img.shields.io/npm/v/tickable-timer.svg?style=flat)](https://www.npmjs.org/package/tickable-timer)
+[![Bower](https://img.shields.io/bower/v/tickable-timer.svg?style=flat)](https://github.com/mohayonao/tickable-timer)
 [![6to5](http://img.shields.io/badge/module-6to5-yellow.svg?style=flat)](https://6to5.org/)
 
 > Manual ticking timer API
