@@ -1,8 +1,9 @@
 # tickable-timer
 [![Build Status](http://img.shields.io/travis/mohayonao/tickable-timer.svg?style=flat)](https://travis-ci.org/mohayonao/tickable-timer)
 [![NPM Version](http://img.shields.io/npm/v/tickable-timer.svg?style=flat)](https://www.npmjs.org/package/tickable-timer)
+[![6to5](http://img.shields.io/badge/module-6to5-yellow.svg?style=flat)](https://6to5.org/)
 
-Manual ticking `setTimeout` / `setInterval`.
+> Manual ticking timer API
 
 ## Installation
 
@@ -18,13 +19,18 @@ bower:
 bower install tickable-timer
 ```
 
+downloads:
+
+  - [tickable-timer.js](https://raw.githubusercontent.com/mohayonao/tickable-timer/master/build/tickable-timer.js)
+  - [tickable-timer.min.js](https://raw.githubusercontent.com/mohayonao/tickable-timer/master/build/tickable-timer.min.js)
+
 ## API
 
-- `setTimeout(callback: function, timeout: number): number`
+- `setTimeout(callback: function, delay: number): number`
 - `clearTimeout(timerId: number): void`
-- `setInterval(callback: function, interval: number): number`
+- `setInterval(callback: function, delay: number): number`
 - `clearInterval(timerId: number): void`
-- `tick(tick: number): void`
+- `tick(tick: number = 1): void`
 
 ## Example
 
@@ -40,12 +46,12 @@ var timer2 = tickable.setInterval(()=> {
 }, 500);
 
 var timer3 = tickable.setTimeout(()=> {
-  // never called.
+  // never called
   console.log("timer3 fired");
 }, 3000);
 
 var timer4 = tickable.setInterval(()=> {
-  // never called.
+  // never called
   console.log("timer4 fired");
 }, 3000);
 
@@ -57,10 +63,7 @@ tickable.setTimeout(()=> {
   tickable.clearInterval(timer4);
 }, 2500);
 
-for (var t = 0; t <= 5000; t += 250) {
-  console.log("-> " + t);
-  tickable.tick(250);
-}
+tickable.tick(5000);
 ```
 
 ## License
