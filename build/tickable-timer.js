@@ -11,180 +11,265 @@ var TickableInterval = require("tickable-interval").TickableInterval;
 
 
 var _timerId = 0;
-var _timeouts = {};
-var _intervals = {};
+var _timers = [];
+var _ = {
+  remain: function (timer) {
+    return timer.remain;
+  },
+  minValue: function (a, b) {
+    return a < b ? a : b;
+  } };
 
 /**
+ * setTimeout
  * @param {function} callback
- * @param {number} timeout
+ * @param {number} delay
  * @return {number} timerId
- * @api public
+ * @public
  */
-function setTimeout(callback, timeout) {
+function setTimeout(callback, delay) {
   var timer = new TickableTimeout();
 
-  timer.set(callback, +timeout || 0);
-
   _timerId += 1;
-  _timeouts[_timerId] = timer;
+  _timers[_timerId] = timer;
+
+  var timerId = _timerId;
+  timer.set(function () {
+    callback();
+    _timers[timerId].clear();
+    delete _timers[timerId];
+  }, delay);
 
   return _timerId;
 }
 
 /**
+ * clearTimeout
  * @param {number} timerId
- * @api public
+ * @public
  */
 function clearTimeout(timerId) {
-  if (_timeouts[timerId]) {
-    _timeouts[timerId].clear();
-    delete _timeouts[timerId];
+  if (_timers[timerId] instanceof TickableTimeout) {
+    _timers[timerId].clear();
+    delete _timers[timerId];
   }
 }
 
 /**
+ * setInterval
  * @param {function} callback
- * @param {number} interval
+ * @param {number} delay
  * @return {number} timerId
- * @api public
+ * @public
  */
-function setInterval(callback, interval) {
+function setInterval(callback, delay) {
   var timer = new TickableInterval();
 
-  timer.set(callback, +interval || 0);
-
   _timerId += 1;
-  _intervals[_timerId] = timer;
+  _timers[_timerId] = timer;
+
+  timer.set(callback, delay);
 
   return _timerId;
 }
 
 /**
+ * clearInterval
  * @param {number} timerId
- * @api public
+ * @public
  */
 function clearInterval(timerId) {
-  if (_intervals[timerId]) {
-    _intervals[timerId].clear();
-    delete _intervals[timerId];
+  if (_timers[timerId] instanceof TickableInterval) {
+    _timers[timerId].clear();
+    delete _timers[timerId];
   }
 }
 
 /**
+ * ticking
  * @param {number} tick
- * @api public
+ * @public
  */
-function tick(tick) {
-  Object.keys(_timeouts).forEach(function (timerId) {
-    _timeouts[timerId].tick(tick);
-  });
-  Object.keys(_intervals).forEach(function (timerId) {
-    _intervals[timerId].tick(tick);
-  });
+function tick() {
+  var tick = arguments[0] === undefined ? 1 : arguments[0];
+  tick = Math.max(1, +tick | 0);
+
+  while (tick > 0) {
+    var remain = _timers.map(_.remain).reduce(_.minValue, tick);
+    _timers.forEach(function (timer) {
+      return timer.tick(remain);
+    });
+    tick -= remain;
+  }
 }
 
 },{"tickable-interval":2,"tickable-timeout":3}],2:[function(require,module,exports){
 "use strict";
 
-/**
- * The manual ticking `setInterval`
- * @class TickableInterval
- */
-var TickableInterval = function TickableInterval() {
-  if (!(this instanceof TickableInterval)) {
-    return new TickableInterval();
-  }
-
-  var _callback = null;
-  var _interval = Infinity;
-  var _remain = Infinity;
-
-  /**
-   * @api public
-   * @param {function} callback
-   * @param {number} interval
-   */
-  this.set = function (callback, interval) {
-    _callback = callback;
-    _interval = Math.max(1, +interval);
-    _remain = _interval;
-  };
-
-  /**
-   * @api public
-   */
-  this.clear = function () {
-    _callback = null;
-    _interval = Infinity;
-    _remain = Infinity;
-  };
-
-  /**
-   * @api public
-   * @param {number} tick
-   */
-  this.tick = function (tick) {
-    if (typeof _callback === "function") {
-      _remain -= tick;
-      while (_remain <= 0) {
-        _callback();
-        _remain += _interval;
-      }
-    }
-  };
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-exports.TickableInterval = TickableInterval;
+/**
+ * The manual ticking `setInterval` / `clearInterval`
+ * @class
+ * @property {function} callback
+ * @property {number} delay
+ * @property {number} remain
+ */
+var TickableInterval = (function () {
+  function TickableInterval() {
+    this.callback = null;
+    this.delay = Infinity;
+    this.remain = Infinity;
+  }
 
+  _prototypeProperties(TickableInterval, null, {
+    set: {
+
+      /**
+       * setInterval
+       * @param {function} callback
+       * @param {number} delay
+       * @public
+       */
+      value: function set(callback, delay) {
+        this.callback = callback;
+        this.delay = Math.max(1, +delay | 0);
+        this.remain = this.delay;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    clear: {
+
+      /**
+       * clearInterval
+       * @public
+       */
+      value: function clear() {
+        this.callback = null;
+        this.delay = Infinity;
+        this.remain = Infinity;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    tick: {
+
+      /**
+       * ticking
+       * @param {number} tick
+       * @public
+       */
+      value: function tick() {
+        var tick = arguments[0] === undefined ? 1 : arguments[0];
+        if (typeof this.callback === "function") {
+          tick = Math.max(1, +tick | 0);
+          this.remain -= tick;
+          while (this.remain <= 0) {
+            this.callback();
+            this.remain += this.delay;
+          }
+        }
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  });
+
+  return TickableInterval;
+})();
+
+exports.TickableInterval = TickableInterval;
 },{}],3:[function(require,module,exports){
 "use strict";
 
-/**
-* The manual ticking `setTimeout`
-* @class TickableTimeout
-*/
-var TickableTimeout = function TickableTimeout() {
-  if (!(this instanceof TickableTimeout)) {
-    return new TickableTimeout();
-  }
-
-  var _callback = null;
-  var _timeout = Infinity;
-
-  /**
-  * @api public
-  * @param {function} callback
-  * @param {number} timeout
-  */
-  this.set = function (callback, timeout) {
-    _callback = callback;
-    _timeout = Math.max(1, +timeout);
-  };
-
-  /**
-  * @api public
-  */
-  this.clear = function () {
-    _callback = null;
-    _timeout = Infinity;
-  };
-
-  /**
-  * @api public
-  * @param {number} tick
-  */
-  this.tick = function (tick) {
-    if (typeof _callback === "function") {
-      _timeout -= tick;
-      if (_timeout <= 0) {
-        _callback();
-        _callback = null;
-      }
-    }
-  };
+var _prototypeProperties = function (child, staticProps, instanceProps) {
+  if (staticProps) Object.defineProperties(child, staticProps);
+  if (instanceProps) Object.defineProperties(child.prototype, instanceProps);
 };
 
-exports.TickableTimeout = TickableTimeout;
+/**
+ * The manual ticking `setTimeout` / `clearTimeout`
+ * @class
+ * @property {function} callback
+ * @property {number} delay
+ * @property {number} remain
+ */
+var TickableTimeout = (function () {
+  function TickableTimeout() {
+    this.callback = null;
+    this.delay = Infinity;
+    this.remain = Infinity;
+  }
 
+  _prototypeProperties(TickableTimeout, null, {
+    set: {
+
+      /**
+       * setTimeout
+       * @param {function} callback
+       * @param {number} delay
+       * @public
+       */
+      value: function set(callback, delay) {
+        this.callback = callback;
+        this.delay = Math.max(1, +delay | 0);
+        this.remain = this.delay;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    clear: {
+
+      /**
+       * clearTimeout
+       * @public
+       */
+      value: function clear() {
+        this.callback = null;
+        this.delay = Infinity;
+        this.remain = Infinity;
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    },
+    tick: {
+
+      /**
+       * ticking
+       * @param {number} tick
+       * @public
+       */
+      value: function tick() {
+        var tick = arguments[0] === undefined ? 1 : arguments[0];
+        if (typeof this.callback === "function") {
+          tick = Math.max(1, +tick | 0);
+          this.remain -= tick;
+          if (this.remain <= 0) {
+            this.callback();
+            this.callback = null;
+            this.delay = Infinity;
+            this.remain = Infinity;
+          }
+        }
+      },
+      writable: true,
+      enumerable: true,
+      configurable: true
+    }
+  });
+
+  return TickableTimeout;
+})();
+
+exports.TickableTimeout = TickableTimeout;
 },{}]},{},[1])(1)
 });
