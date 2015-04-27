@@ -1,10 +1,7 @@
 "use strict";
 
-import support from "source-map-support";
-support.install();
-
 import assert from "power-assert";
-import tickable from "../lib/tickable-timer";
+import * as tickable from "../src/tickable-timer";
 
 describe("tickable-timer", ()=> {
   it("works", ()=> {

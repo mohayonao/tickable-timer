@@ -7,13 +7,12 @@
     "url": "https://github.com/mohayonao/tickable-timer/issues"
   },
   "devDependencies": {
-    "6to5": "^2.13.3",
-    "browserify": "^8.1.1",
-    "espower-6to5": "^1.1.0",
-    "mocha": "^2.1.0",
-    "power-assert": "^0.10.1",
-    "source-map-support": "^0.2.9",
-    "uglify-js": "^2.4.16"
+    "babel": "^5.1.13",
+    "browserify": "^9.0.8",
+    "espower-babel": "^2.1.0",
+    "mocha": "^2.2.4",
+    "power-assert": "^0.11.0",
+    "uglify-js": "^2.4.20"
   },
   "files": [
     "lib"
@@ -34,11 +33,11 @@
     "url": "https://github.com/mohayonao/tickable-timer.git"
   },
   "scripts": {
-    "build": "npm run build-6to5 && npm run build-browser && npm run build-minify",
-    "build-6to5": "6to5 src --out-dir lib --source-maps-inline",
-    "build-browser": "browserify lib/tickable-timer.js --standalone TickableTimer > build/tickable-timer.js",
-    "build-minify": "uglifyjs build/tickable-timer.js > build/tickable-timer.min.js",
-    "test": "npm run build-6to5 && mocha"
+    "build": "npm run build-to5 && npm run build-browser && npm run build-minify",
+    "build-browser": "browserify lib/tickable-timer.js --standalone TickableTimer -o build/tickable-timer.js",
+    "build-minify": "uglifyjs build/tickable-timer.js -o build/tickable-timer.min.js",
+    "build-to5": "babel src --out-dir lib --source-maps-inline",
+    "test": "mocha --require espower-babel/guess"
   },
   "dependencies": {
     "tickable-interval": "0.0.3",
