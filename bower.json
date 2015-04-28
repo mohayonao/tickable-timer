@@ -1,7 +1,7 @@
 {
   "name": "tickable-timer",
   "description": "Manual ticking timer API",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "authors": [
     "mohayonao <mohayonao@gmail.com>"
   ],
@@ -13,8 +13,16 @@
   ],
   "keywords": [
     "timer",
+    "setInterval",
+    "setTimeout",
+    "clearInterval",
+    "clearTimeout",
     "test"
   ],
   "license": "MIT",
-  "main": "build/tickable-timer.js"
+  "main": "build/tickable-timer.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mohayonao/tickable-timer.git"
+  }
 }
