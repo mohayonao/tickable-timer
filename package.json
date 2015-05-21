@@ -8,12 +8,12 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "babel": "^5.1.13",
-    "browserify": "^9.0.8",
-    "espower-babel": "^2.1.0",
-    "mocha": "^2.2.4",
+    "babel": "^5.4.5",
+    "browserify": "^10.2.1",
+    "espower-babel": "^3.1.1",
+    "mocha": "^2.2.5",
     "power-assert": "^0.11.0",
-    "uglify-js": "^2.4.20"
+    "uglify-js": "^2.4.23"
   },
   "files": [
     "package.json",
@@ -40,7 +40,7 @@
     "build-browser": "browserify lib --standalone TickableTimer -o build/tickable-timer.js",
     "build-minify": "uglifyjs build/tickable-timer.js -o build/tickable-timer.min.js",
     "build-to5": "babel src --out-dir lib --source-maps-inline",
-    "test": "mocha --require espower-babel/guess",
+    "test": "mocha",
     "travis": "npm run test"
   }
 }
