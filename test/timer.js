@@ -7,17 +7,15 @@ describe("tickable", function() {
 
   before(function() {
     let push = (value) => {
-      return () => {
-        this.passed.push(value);
-      };
+      this.passed.push(value);
     };
 
-    this.timerId1 = tickable.setInterval(push("A"), 100);
-    this.timerId2 = tickable.setInterval(push("B"), 125);
-    this.timerId3 = tickable.setInterval(push("C"), 250);
-    this.timerId4 = tickable.setTimeout(push("D"), 250);
-    this.timerId5 = tickable.setTimeout(push("E"), 750);
-    this.timerId6 = tickable.setTimeout(push("F"), 1000);
+    this.timerId1 = tickable.setInterval(push, 100, "A");
+    this.timerId2 = tickable.setInterval(push, 125, "B");
+    this.timerId3 = tickable.setInterval(push, 250, "C");
+    this.timerId4 = tickable.setTimeout(push, 250, "D");
+    this.timerId5 = tickable.setTimeout(push, 750, "E");
+    this.timerId6 = tickable.setTimeout(push, 1000, "F");
 
     tickable.on("tick", (value) => {
       this.emitted.push(value);

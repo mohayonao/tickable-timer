@@ -38,9 +38,9 @@ downloads:
 
 ### Methods
 _Inherits methods from [EventEmitter](https://nodejs.org/api/events.html)._
-- `setTimeout(callback: function, delay: number): number`
+- `setTimeout(callback: function, delay: number, ...params: any): number`
 - `clearTimeout(timerId: number): void`
-- `setInterval(callback: function, delay: number): number`
+- `setInterval(callback: function, delay: number, ...params: any): number`
 - `clearInterval(timerId: number): void`
 - `tick(tick: number = 1): void`
 
@@ -49,6 +49,34 @@ _Inherits methods from [EventEmitter](https://nodejs.org/api/events.html)._
   - `tick: number` The ticking interval
 - `ticked`
   - `tick: number` The ticking interval
+
+## Usage
+
+```javascript
+function counter(start, stop, interval, timerAPI = global) {
+  let emitter = new EventEmitter();
+  let count = start;
+  let timerId = timerAPI.setInterval(() => {
+    emitter.emit("bang", count++);
+    if (stop <= count) {
+      emitter.emit("end");
+      timerAPI.clearInterval(timerId);
+    }
+  }, interval);
+
+  return emitter;
+}
+
+// in the production (use native timer)
+counter(0, 10, 1000).on("bang", (count) => {
+  console.log(`bang! ${count}`);
+});
+
+// in the test (use tickable timer)
+import tickable from "tickable-timer";
+
+counter(0, 10, 1000, tickable).on("bang", spy);
+```
 
 ## Example
 

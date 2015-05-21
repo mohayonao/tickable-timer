@@ -52,9 +52,10 @@ export default class TimerAPI extends EventEmitter {
    * setTimeout
    * @param  {Function} callback
    * @param  {Number}   delay
+   * @param  {...*}     params
    * @return {Number}   timerId
    */
-  setTimeout(callback, delay) {
+  setTimeout(callback, delay, ...params) {
     let timer = new Timeout();
 
     this._timerId += 1;
@@ -62,12 +63,9 @@ export default class TimerAPI extends EventEmitter {
 
     let timerId = this._timerId;
 
-    timer.set(()=> {
-      callback();
-      if (this._timers[timerId]) {
-        this._timers[timerId].clear();
-        delete this._timers[timerId];
-      }
+    timer.set(() => {
+      callback(...params);
+      this.clearTimeout(timerId);
     }, delay);
 
     return this._timerId;
@@ -89,15 +87,18 @@ export default class TimerAPI extends EventEmitter {
    * setInterval
    * @param  {Function} callback
    * @param  {Number}   delay
+   * @param  {...*}     params
    * @return {Number}   timerId
    */
-  setInterval(callback, delay) {
+  setInterval(callback, delay, ...params) {
     let timer = new Interval();
 
     this._timerId += 1;
     this._timers[this._timerId] = timer;
 
-    timer.set(callback, delay);
+    timer.set(() => {
+      callback(...params);
+    }, delay);
 
     return this._timerId;
   }
