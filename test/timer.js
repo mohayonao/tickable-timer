@@ -1,11 +1,8 @@
-"use strict";
-
 import assert from "power-assert";
 import tickable from "../src/";
 
 describe("tickable", function() {
-
-  before(function() {
+  before(() => {
     let push = (value) => {
       this.passed.push(value);
     };
@@ -22,12 +19,12 @@ describe("tickable", function() {
     });
   });
 
-  beforeEach(function() {
+  beforeEach(() => {
     this.passed = [];
     this.emitted = [];
   });
 
-  it("validate", function() {
+  it("validate", () => {
     assert(typeof this.timerId1 === "number");
     assert(typeof this.timerId2 === "number");
     assert(typeof this.timerId3 === "number");
@@ -62,25 +59,33 @@ describe("tickable", function() {
       4, 5, 6,
     ]);
   });
-  it("00:00.000 -> 00:00.500", function() {
+  it("00:00.000 -> 00:00.500", () => {
     tickable.tick(500);
 
     assert.deepEqual(this.passed, [
-      "A",           // 00:00.100
-      "B",           // 00:00.125
-      "A",           // 00:00.200
-      "B", "C", "D", // 00:00.250
-      "A",           // 00:00.300
-      "B",           // 00:00.375
-      "A",           // 00:00.400
-      "A", "B", "C", // 00:00.500
+      // 00:00.100
+      "A",
+      // 00:00.125
+      "B",
+      // 00:00.200
+      "A",
+      // 00:00.250
+      "B", "C", "D",
+      // 00:00.300
+      "A",
+      // 00:00.375
+      "B",
+      // 00:00.400
+      "A",
+      // 00:00.500
+      "A", "B", "C",
     ], "00:00.500");
 
     assert.deepEqual(this.emitted, [
       100, 25, 75, 50, 50, 75, 25, 100,
     ], "00:00.500");
   });
-  it("clear(2,5)", function() {
+  it("clear(2,5)", () => {
     tickable.clearInterval(this.timerId2);
     tickable.clearTimeout(this.timerId3);
     tickable.clearTimeout(this.timerId5);
@@ -98,23 +103,29 @@ describe("tickable", function() {
       1, 3, 6,
     ]);
   });
-  it("00:00.500 -> 00:01.000", function() {
+  it("00:00.500 -> 00:01.000", () => {
     tickable.tick(500);
 
     assert.deepEqual(this.passed, [
-      "A",           // 00:00.600
-      "A",           // 00:00.700
-      "C",           // 00:00.750
-      "A",           // 00:00.800
-      "A",           // 00:00.900
-      "A", "C", "F", // 00:01.000
+      // 00:00.600
+      "A",
+      // 00:00.700
+      "A",
+      // 00:00.750
+      "C",
+      // 00:00.800
+      "A",
+      // 00:00.900
+      "A",
+      // 00:01.000
+      "A", "C", "F",
     ], "00:01.000");
 
     assert.deepEqual(this.emitted, [
       100, 100, 50, 50, 100, 100,
     ], "00:01.000");
   });
-  it("clear(1,3,6)", function() {
+  it("clear(1,3,6)", () => {
     tickable.clearInterval(this.timerId1);
     tickable.clearInterval(this.timerId3);
     tickable.clearTimeout(this.timerId4);
@@ -129,7 +140,7 @@ describe("tickable", function() {
     assert.deepEqual(tickable.timers, [
     ]);
   });
-  it("00:01.000 -> 00:01.500", function() {
+  it("00:01.000 -> 00:01.500", () => {
     tickable.tick(500);
 
     assert.deepEqual(this.passed, [
