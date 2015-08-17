@@ -1,6 +1,6 @@
 import { EventEmitter } from "events";
-import Timeout from "./timeout";
-import Interval from "./interval";
+import Timeout from "./Timeout";
+import Interval from "./Interval";
 
 let util = {
   remain(timer) {
