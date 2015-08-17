@@ -134,4 +134,14 @@ export default class TimerAPI extends EventEmitter {
       tick -= remain;
     }
   }
+
+  /**
+   * clearAllTimers
+   * @return {void}
+   */
+  clearAllTimers() {
+    this._timers.splice(0).forEach((timer) => {
+      timer.clear();
+    });
+  }
 }
