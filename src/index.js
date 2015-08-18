@@ -1,3 +1,3 @@
-import TimerAPI from "./timer-api";
+import TimerAPI from "./TimerAPI";
 
 export default new TimerAPI();

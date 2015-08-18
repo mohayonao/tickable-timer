@@ -1,19 +1,23 @@
 {
   "name": "tickable-timer",
   "description": "Manual ticking timer API",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "author": "mohayonao <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/tickable-timer/issues"
   },
   "dependencies": {},
   "devDependencies": {
-    "babel": "^5.4.5",
-    "browserify": "^10.2.1",
-    "espower-babel": "^3.1.1",
+    "babel": "^5.8.21",
+    "babel-eslint": "^4.0.10",
+    "browserify": "^11.0.1",
+    "eslint": "^1.1.0",
+    "espower-babel": "^3.2.0",
+    "isparta": "^3.0.3",
     "mocha": "^2.2.5",
     "power-assert": "^0.11.0",
-    "uglify-js": "^2.4.23"
+    "sinon": "^1.15.4",
+    "uglify-js": "^2.4.24"
   },
   "files": [
     "package.json",
@@ -40,7 +44,10 @@
     "build-browser": "browserify lib --standalone TickableTimer -o build/tickable-timer.js",
     "build-minify": "uglifyjs build/tickable-timer.js -o build/tickable-timer.min.js",
     "build-to5": "babel src --out-dir lib --source-maps-inline",
-    "test": "mocha",
+    "cover": "babel-node $(npm bin)/isparta cover --report text --report html --report lcov _mocha",
+    "lint": "eslint src test",
+    "prepublish": "rm -rf lib && npm run lint && npm run test && npm run build-to5",
+    "test": "mocha --compilers js:espower-babel/guess",
     "travis": "npm run test"
   }
 }

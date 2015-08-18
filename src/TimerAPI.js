@@ -1,6 +1,6 @@
-import {EventEmitter} from "events";
-import Timeout from "./timeout";
-import Interval from "./interval";
+import { EventEmitter } from "events";
+import Timeout from "./Timeout";
+import Interval from "./Interval";
 
 let util = {
   remain(timer) {
@@ -125,6 +125,7 @@ export default class TimerAPI extends EventEmitter {
 
     while (tick > 0) {
       let remain = this._timers.map(util.remain).reduce(util.minValue, tick);
+
       this.emit("tick", remain);
       this._timers.forEach((timer) => {
         timer.tick(remain);
@@ -132,5 +133,15 @@ export default class TimerAPI extends EventEmitter {
       this.emit("ticked", remain);
       tick -= remain;
     }
+  }
+
+  /**
+   * clearAllTimers
+   * @return {void}
+   */
+  clearAllTimers() {
+    this._timers.splice(0).forEach((timer) => {
+      timer.clear();
+    });
   }
 }

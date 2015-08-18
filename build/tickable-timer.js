@@ -25,42 +25,42 @@ var Interval = (function () {
     this.remain = Infinity;
   }
 
+  /**
+   * setInterval
+   * @param  {Function} callback
+   * @param  {Number}   delay
+   * @return {void}
+   */
+
   _createClass(Interval, [{
     key: "set",
-
-    /**
-     * setInterval
-     * @param  {Function} callback
-     * @param  {Number}   delay
-     * @return {void}
-     */
     value: function set(callback, delay) {
       this.callback = callback;
       this.delay = Math.max(1, +delay | 0);
       this.remain = this.delay;
     }
-  }, {
-    key: "clear",
 
     /**
      * clearInterval
      * @return {void}
      */
+  }, {
+    key: "clear",
     value: function clear() {
       this.callback = null;
       this.delay = Infinity;
       this.remain = Infinity;
     }
-  }, {
-    key: "tick",
 
     /**
      * ticking
      * @param  {Number} tick
      * @return {void}
      */
+  }, {
+    key: "tick",
     value: function tick() {
-      var _tick = arguments[0] === undefined ? 1 : arguments[0];
+      var _tick = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
       if (typeof this.callback === "function") {
         _tick = Math.max(1, +_tick | 0);
@@ -105,42 +105,42 @@ var Timeout = (function () {
     this.remain = Infinity;
   }
 
+  /**
+   * setTimeout
+   * @param  {Function} callback
+   * @param  {Number}   delay
+   * @return {void}
+   */
+
   _createClass(Timeout, [{
     key: "set",
-
-    /**
-     * setTimeout
-     * @param  {Function} callback
-     * @param  {Number}   delay
-     * @return {void}
-     */
     value: function set(callback, delay) {
       this.callback = callback;
       this.delay = Math.max(1, +delay | 0);
       this.remain = this.delay;
     }
-  }, {
-    key: "clear",
 
     /**
      * clearTimeout
      * @return {void}
      */
+  }, {
+    key: "clear",
     value: function clear() {
       this.callback = null;
       this.delay = Infinity;
       this.remain = Infinity;
     }
-  }, {
-    key: "tick",
 
     /**
      * ticking
      * @param  {Number} tick
      * @return {void}
      */
+  }, {
+    key: "tick",
     value: function tick() {
-      var _tick = arguments[0] === undefined ? 1 : arguments[0];
+      var _tick = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
       if (typeof this.callback === "function") {
         _tick = Math.max(1, +_tick | 0);
@@ -169,23 +169,23 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+var _get = function get(_x2, _x3, _x4) { var _again = true; _function: while (_again) { var object = _x2, property = _x3, receiver = _x4; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x2 = parent; _x3 = property; _x4 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var _events = require("events");
 
-var _timeout = require("./timeout");
+var _Timeout = require("./Timeout");
 
-var _timeout2 = _interopRequireDefault(_timeout);
+var _Timeout2 = _interopRequireDefault(_Timeout);
 
-var _interval = require("./interval");
+var _Interval = require("./Interval");
 
-var _interval2 = _interopRequireDefault(_interval);
+var _Interval2 = _interopRequireDefault(_Interval);
 
 var util = {
   remain: function remain(timer) {
@@ -204,9 +204,12 @@ var util = {
     });
 
     return result;
-  } };
+  }
+};
 
 var TimerAPI = (function (_EventEmitter) {
+  _inherits(TimerAPI, _EventEmitter);
+
   function TimerAPI() {
     _classCallCheck(this, TimerAPI);
 
@@ -222,24 +225,7 @@ var TimerAPI = (function (_EventEmitter) {
     this._timers = [];
   }
 
-  _inherits(TimerAPI, _EventEmitter);
-
   _createClass(TimerAPI, [{
-    key: "timers",
-    get: function () {
-      return util.collectIndex(this._timers, Object);
-    }
-  }, {
-    key: "intervals",
-    get: function () {
-      return util.collectIndex(this._timers, _interval2["default"]);
-    }
-  }, {
-    key: "timeouts",
-    get: function () {
-      return util.collectIndex(this._timers, _timeout2["default"]);
-    }
-  }, {
     key: "setTimeout",
 
     /**
@@ -256,7 +242,7 @@ var TimerAPI = (function (_EventEmitter) {
 
       var _this = this;
 
-      var timer = new _timeout2["default"]();
+      var timer = new _Timeout2["default"]();
 
       this._timerId += 1;
       this._timers[this._timerId] = timer;
@@ -270,22 +256,20 @@ var TimerAPI = (function (_EventEmitter) {
 
       return this._timerId;
     }
-  }, {
-    key: "clearTimeout",
 
     /**
      * clearTimeout
      * @param  {Number} timerId
      * @return {void}
      */
+  }, {
+    key: "clearTimeout",
     value: function clearTimeout(timerId) {
-      if (this._timers[timerId] instanceof _timeout2["default"]) {
+      if (this._timers[timerId] instanceof _Timeout2["default"]) {
         this._timers[timerId].clear();
         delete this._timers[timerId];
       }
     }
-  }, {
-    key: "setInterval",
 
     /**
      * setInterval
@@ -294,12 +278,14 @@ var TimerAPI = (function (_EventEmitter) {
      * @param  {...*}     params
      * @return {Number}   timerId
      */
+  }, {
+    key: "setInterval",
     value: function setInterval(callback, delay) {
       for (var _len2 = arguments.length, params = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
         params[_key2 - 2] = arguments[_key2];
       }
 
-      var timer = new _interval2["default"]();
+      var timer = new _Interval2["default"]();
 
       this._timerId += 1;
       this._timers[this._timerId] = timer;
@@ -310,37 +296,38 @@ var TimerAPI = (function (_EventEmitter) {
 
       return this._timerId;
     }
-  }, {
-    key: "clearInterval",
 
     /**
      * clearInterval
      * @param  {Number} timerId
      * @return {void}
      */
+  }, {
+    key: "clearInterval",
     value: function clearInterval(timerId) {
-      if (this._timers[timerId] instanceof _interval2["default"]) {
+      if (this._timers[timerId] instanceof _Interval2["default"]) {
         this._timers[timerId].clear();
         delete this._timers[timerId];
       }
     }
-  }, {
-    key: "tick",
 
     /**
      * ticking
      * @param  {Number} tick
      * @return {void}
      */
+  }, {
+    key: "tick",
     value: function tick() {
       var _this2 = this;
 
-      var _tick = arguments[0] === undefined ? 1 : arguments[0];
+      var _tick = arguments.length <= 0 || arguments[0] === undefined ? 1 : arguments[0];
 
       _tick = Math.max(1, +_tick | 0);
 
       var _loop = function () {
         var remain = _this2._timers.map(util.remain).reduce(util.minValue, _tick);
+
         _this2.emit("tick", remain);
         _this2._timers.forEach(function (timer) {
           timer.tick(remain);
@@ -353,6 +340,33 @@ var TimerAPI = (function (_EventEmitter) {
         _loop();
       }
     }
+
+    /**
+     * clearAllTimers
+     * @return {void}
+     */
+  }, {
+    key: "clearAllTimers",
+    value: function clearAllTimers() {
+      this._timers.splice(0).forEach(function (timer) {
+        timer.clear();
+      });
+    }
+  }, {
+    key: "timers",
+    get: function get() {
+      return util.collectIndex(this._timers, Object);
+    }
+  }, {
+    key: "intervals",
+    get: function get() {
+      return util.collectIndex(this._timers, _Interval2["default"]);
+    }
+  }, {
+    key: "timeouts",
+    get: function get() {
+      return util.collectIndex(this._timers, _Timeout2["default"]);
+    }
   }]);
 
   return TimerAPI;
@@ -360,7 +374,22 @@ var TimerAPI = (function (_EventEmitter) {
 
 exports["default"] = TimerAPI;
 module.exports = exports["default"];
-},{"./interval":1,"./timeout":2,"events":4}],4:[function(require,module,exports){
+},{"./Interval":1,"./Timeout":2,"events":5}],4:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _TimerAPI = require("./TimerAPI");
+
+var _TimerAPI2 = _interopRequireDefault(_TimerAPI);
+
+exports["default"] = new _TimerAPI2["default"]();
+module.exports = exports["default"];
+},{"./TimerAPI":3}],5:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -663,20 +692,5 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
-},{}],5:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var _timerApi = require("./timer-api");
-
-var _timerApi2 = _interopRequireDefault(_timerApi);
-
-exports["default"] = new _timerApi2["default"]();
-module.exports = exports["default"];
-},{"./timer-api":3}]},{},[5])(5)
+},{}]},{},[4])(4)
 });
