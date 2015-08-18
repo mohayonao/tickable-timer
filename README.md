@@ -43,6 +43,7 @@ _Inherits methods from [EventEmitter](https://nodejs.org/api/events.html)._
 - `setInterval(callback: function, delay: number, ...params: any): number`
 - `clearInterval(timerId: number): void`
 - `tick(tick: number = 1): void`
+- `clearAllTimers(): void`
 
 ### Events
 - `tick`
@@ -103,8 +104,7 @@ tickable.setInterval(() => {
 
 tickable.setTimeout(() => {
   console.log("clear: all timers");
-  tickable.timeouts.forEach(tickable.clearTimeout);
-  tickable.intervals.forEach(tickable.clearInterval);
+  tickable.clearAllTimers();
   console.log("timers:", tickable.timers);
 }, 2500);
 
