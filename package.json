@@ -1,8 +1,8 @@
 {
   "name": "tickable-timer",
   "description": "Manual ticking timer API",
-  "version": "0.3.0",
-  "author": "mohayonao <mohayonao@gmail.com>",
+  "version": "1.0.0",
+  "author": "Nao Yonamine <mohayonao@gmail.com>",
   "bugs": {
     "url": "https://github.com/mohayonao/tickable-timer/issues"
   },
