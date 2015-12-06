@@ -1,7 +1,6 @@
 # tickable-timer
 [![Build Status](http://img.shields.io/travis/mohayonao/tickable-timer.svg?style=flat-square)](https://travis-ci.org/mohayonao/tickable-timer)
 [![NPM Version](http://img.shields.io/npm/v/tickable-timer.svg?style=flat-square)](https://www.npmjs.org/package/tickable-timer)
-[![Bower](https://img.shields.io/bower/v/tickable-timer.svg?style=flat-square)](https://github.com/mohayonao/tickable-timer)
 [![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](http://mohayonao.mit-license.org/)
 
 > Manual ticking timer API for test CI
@@ -12,22 +11,9 @@
 
 ## Installation
 
-npm:
-
 ```
 npm install tickable-timer
 ```
-
-bower:
-
-```
-bower install tickable-timer
-```
-
-downloads:
-
-  - [tickable-timer.js](https://raw.githubusercontent.com/mohayonao/tickable-timer/master/build/tickable-timer.js)
-  - [tickable-timer.min.js](https://raw.githubusercontent.com/mohayonao/tickable-timer/master/build/tickable-timer.min.js)
 
 ## API
 
