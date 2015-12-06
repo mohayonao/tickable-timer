@@ -39,7 +39,7 @@ export default class Timeout {
    * @param  {Number} tick
    * @return {void}
    */
-  tick(tick = 1) {
+  tick(tick) {
     if (typeof this.callback === "function") {
       tick = Math.max(1, +tick|0);
       this.remain -= tick;
